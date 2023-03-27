@@ -8,13 +8,22 @@
     <artifactId>coin-iaas</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
+  <description>iaas的网关服务</description>
   <artifactId>gateway-server</artifactId>
 
   <properties>
-
-
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
