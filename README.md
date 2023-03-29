@@ -223,3 +223,7 @@ To github.com:michaelliao/learngit.git
 从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
 
 验证 ：git push --set-upstream origin coin-1003
+
+## rebase 验证
+
+
