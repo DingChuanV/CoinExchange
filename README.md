@@ -9,4 +9,4 @@ fast forward
 git switch -c coin-1002
 git switch -d coin-1001
 
-
+fix bug--issue-100
