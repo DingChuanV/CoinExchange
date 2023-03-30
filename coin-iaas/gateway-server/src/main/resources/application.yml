@@ -17,8 +17,17 @@ spring:
           uri: lb://admin-service
           predicates:
             - Path=/admin/**
-
         - id: test_router
-          uri: https://www.baidu.com/
+          uri: https://www.aliyun.com
           predicates:
-            - Path=/test
+            - Path=/product
+    sentinel:
+      filter:
+        enabled: true
+      datasource:
+        ds1.file:
+          file: classpath:router-flow.json
+          ruleType: gw-flow
+        ds2.file:
+          file: classpath:api-flow.json
+          ruleType: gw_api_group
