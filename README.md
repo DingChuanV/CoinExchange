@@ -226,4 +226,4 @@ To github.com:michaelliao/learngit.git
 
 ## rebase 验证
 
-
+rebase
