@@ -3,10 +3,8 @@ package com.uin.authorization.config;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,9 +12,10 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 /**
  * 授权服务器配置
@@ -35,7 +34,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final UserDetailsService userDetailsService;
-  private final RedisConnectionFactory redisConnectionFactory;
+  //private final RedisConnectionFactory redisConnectionFactory;
 
   /**
    * 添加第三方客户端
@@ -67,10 +66,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     endpoints.authenticationManager(authenticationManager)
         .userDetailsService(userDetailsService)
-        .tokenStore(redisTokenstore());
-    log.info("authenticationManager:{},authenticationManager:{},tokenStore:{}", authenticationManager,
-        userDetailsService, redisTokenstore());
+        .tokenStore(jwtTokenstore())
+        .tokenEnhancer(jwtAccessTokenConverter());
+    log.info("authenticationManager:{},authenticationManager:{},tokenStore:{},tokenEnhancer:{}", authenticationManager,
+        userDetailsService, jwtTokenstore(), jwtAccessTokenConverter());
     super.configure(endpoints);
+  }
+
+  private TokenStore jwtTokenstore() {
+    JwtTokenStore jwtTokenStore = new JwtTokenStore(jwtAccessTokenConverter());
+    return jwtTokenStore;
+  }
+
+  private JwtAccessTokenConverter jwtAccessTokenConverter() {
+    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    // 读取classpath下的文件
+    ClassPathResource pathResource = new ClassPathResource("coinexchange.jks");
+    // 获取KeyStoreFactory
+    KeyStoreKeyFactory factory = new KeyStoreKeyFactory(pathResource, "coinexchange".toCharArray());
+    converter.setKeyPair(factory.getKeyPair("coinexchange", "coinexchange".toCharArray()));
+    return converter;
   }
 
   /**
@@ -78,7 +93,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
    *
    * @return
    */
-  public TokenStore redisTokenstore() {
-    return new RedisTokenStore(redisConnectionFactory);
-  }
+//  public TokenStore redisTokenstore() {
+//    return new RedisTokenStore(redisConnectionFactory);
+//  }
+
 }
