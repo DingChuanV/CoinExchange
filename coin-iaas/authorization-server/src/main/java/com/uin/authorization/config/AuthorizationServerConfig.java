@@ -26,9 +26,17 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
   private static final Logger log = LoggerFactory.getLogger(AuthorizationServerConfig.class);
-  private final String clientId = "coin-api";
-  private final CharSequence charSequence = "coin-secret";
-  private final String scope = "all";
+  private final String COIN_API = "coin-api";
+  private final CharSequence COIN_SECRET = "coin-secret";
+  private final String INSIDE_API = "inside-app";
+  private final CharSequence INSIDE_SECRET = "inside-secret";
+  private final String SCOPE = "all";
+  /**
+   * 授权类型
+   */
+  private final String PASSWORD = "password";
+  private final String REFRESH_TOKEN = "refresh_token";
+  private final String CLIENT_CREDENTIALS = "client_credentials";
   private static final int accessTokenValiditySeconds = 7 * 24 * 3600;// one week
   private static final int refreshTokenValiditySeconds = 30 * 24 * 3600;// one month
   private final PasswordEncoder passwordEncoder;
@@ -45,15 +53,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     clients.inMemory()
-        .withClient(clientId)
-        .secret(passwordEncoder.encode(charSequence))
-        .scopes(scope)
-        .authorizedGrantTypes("password", "refresh_token")
+        .withClient(COIN_API)
+        .secret(passwordEncoder.encode(COIN_SECRET))
+        .scopes(SCOPE)
+        .authorizedGrantTypes(PASSWORD, REFRESH_TOKEN)//授权类型
         .accessTokenValiditySeconds(accessTokenValiditySeconds)
-        .refreshTokenValiditySeconds(refreshTokenValiditySeconds);
-    log.info("Third party clientId:{},secret:{},scopes:{},accessTokenValiditySeconds:{},"
-            + "refreshTokenValiditySeconds:{}", clientId,
-        charSequence, scope, accessTokenValiditySeconds, refreshTokenValiditySeconds);
+        .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
+        .and()
+        .withClient(INSIDE_API)
+        .secret(passwordEncoder.encode(INSIDE_SECRET))
+        .scopes(SCOPE)
+        .authorizedGrantTypes(CLIENT_CREDENTIALS)
+        .accessTokenValiditySeconds(accessTokenValiditySeconds);
+    log.info("Third party COIN_API:{},secret:{},scopes:{},accessTokenValiditySeconds:{},"
+            + "refreshTokenValiditySeconds:{}", COIN_API,
+        COIN_SECRET, SCOPE, accessTokenValiditySeconds, refreshTokenValiditySeconds);
     super.configure(clients);
   }
 
