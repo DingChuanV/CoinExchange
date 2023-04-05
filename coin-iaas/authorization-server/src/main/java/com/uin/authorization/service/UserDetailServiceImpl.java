@@ -1,6 +1,11 @@
 package com.uin.authorization.service;
 
+import static com.uin.authorization.constant.LoginConstant.QUERY_MEMBER_SQL;
+
 import com.uin.authorization.constant.LoginConstant;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -52,7 +58,24 @@ public class UserDetailServiceImpl implements UserDetailsService {
    * @return
    */
   private UserDetails loadMemberUserByUsername(String username) {
-    return null;
+    return jdbcTemplate.queryForObject(LoginConstant.QUERY_MEMBER_SQL, (RowMapper<UserDetails>) (rs, rowNum) -> {
+      if(rs.wasNull()){
+        throw new UsernameNotFoundException("会员：" + username + "不存在");
+      }
+      long id = rs.getLong("id"); // 获取用户的id
+      String password = rs.getString("password");
+      int status = rs.getInt("status");
+      return new User(
+          String.valueOf(id),
+          password,
+          status == 1 ,
+          true ,
+          true ,
+          true,
+          Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
+      );
+    }, username, username);
+
   }
 
   /**

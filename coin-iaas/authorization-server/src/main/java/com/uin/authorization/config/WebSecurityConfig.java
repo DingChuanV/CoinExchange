@@ -54,4 +54,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().authorizeRequests().anyRequest().authenticated();
   }
+
+
+  public static void main(String[] args) {
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    log.info("password:\n{}",encoder.encode("123456"));
+  }
 }

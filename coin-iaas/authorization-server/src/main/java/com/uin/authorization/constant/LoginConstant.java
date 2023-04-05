@@ -24,4 +24,6 @@ public class LoginConstant {
           + "sys_privilege.id LEFT JOIN sys_user_role ON sys_role_privilege.role_id = sys_user_role.role_id WHERE sys_user_role.user_id = ?";
 
   public static final String ADMIN_CODE = "ROLE_ADMIN";
+  public static final String QUERY_MEMBER_SQL =
+      "SELECT `id`,`password`, `status` FROM `user` WHERE mobile = ? or email = ? ";
 }
