@@ -29,8 +29,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private final String clientId = "coin-api";
   private final CharSequence charSequence = "coin-secret";
   private final String scope = "all";
-  private static final int accessTokenValiditySeconds = 3600;
-  private static final int refreshTokenValiditySeconds = 7 * 3600;
+  private static final int accessTokenValiditySeconds = 7 * 24 * 3600;// one week
+  private static final int refreshTokenValiditySeconds = 30 * 24 * 3600;// one month
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final UserDetailsService userDetailsService;
@@ -48,6 +48,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         .withClient(clientId)
         .secret(passwordEncoder.encode(charSequence))
         .scopes(scope)
+        .authorizedGrantTypes("password", "refresh_token")
         .accessTokenValiditySeconds(accessTokenValiditySeconds)
         .refreshTokenValiditySeconds(refreshTokenValiditySeconds);
     log.info("Third party clientId:{},secret:{},scopes:{},accessTokenValiditySeconds:{},"
