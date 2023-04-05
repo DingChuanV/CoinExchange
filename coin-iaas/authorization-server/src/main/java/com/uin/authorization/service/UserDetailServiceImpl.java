@@ -42,7 +42,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
       log.warn("login type:{}", parameter);
       throw new AuthorizationServiceException("登录类型为NULL");
     }
+    String grantType = servletRequestAttributes.getRequest().getParameter("grant_type");
+    if (grantType.equals(LoginConstant.REFRESH_TOKEN)) {
+      username = adjustUsername(username, parameter);
+    }
     switch (parameter) {
+
       case LoginConstant.ADMIN_TYPE:
         return loadSysUserByUsername(username);
       case LoginConstant.MEMBER_TYPE:
@@ -53,13 +58,29 @@ public class UserDetailServiceImpl implements UserDetailsService {
   }
 
   /**
+   * @param username  id
+   * @param loginType
+   * @return
+   */
+  private String adjustUsername(String username, String loginType) {
+    if (LoginConstant.ADMIN_TYPE.equals(loginType)) {
+      return jdbcTemplate.queryForObject(LoginConstant.QUERY_ADMIN_USER_WITH_ID, String.class, username);
+    }
+    if (LoginConstant.MEMBER_TYPE.equals(loginType)) {
+      return jdbcTemplate.queryForObject(LoginConstant.QUERY_MEMBER_USER_WITH_ID, String.class, username);
+    }
+    return username;
+
+  }
+
+  /**
    * 会员登录
    *
    * @return
    */
   private UserDetails loadMemberUserByUsername(String username) {
     return jdbcTemplate.queryForObject(LoginConstant.QUERY_MEMBER_SQL, (RowMapper<UserDetails>) (rs, rowNum) -> {
-      if(rs.wasNull()){
+      if (rs.wasNull()) {
         throw new UsernameNotFoundException("会员：" + username + "不存在");
       }
       long id = rs.getLong("id"); // 获取用户的id
@@ -68,9 +89,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
       return new User(
           String.valueOf(id),
           password,
-          status == 1 ,
-          true ,
-          true ,
+          status == 1,
+          true,
+          true,
           true,
           Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
       );
