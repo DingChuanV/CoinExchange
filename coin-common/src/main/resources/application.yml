@@ -1,0 +1,62 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: coin-common
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/CoinExchange
+    username: root
+    password: 12345678
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: Quant2019
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        enabled: false
+        file-extension: yaml
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8858
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*Mapper.xml
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: linkedhashmap
+      keyConvertor: fastjson
+  remote:
+    default:
+      type: redis
+      keyConvertor: fastjson
+      valueEncoder: kryo
+      valueDecoder: kryo
+      poolConfig:
+        minIdle: 5
+        maxIdle: 20
+        maxTotal: 50
+      host: ${spring.redis.host}
+      port: ${spring.redis.port}
+      password:  ${spring.redis.password}
+
+swagger2:
+  basePackage: com.uin.common.controller
+  name: dingchuan
+  url: https://github.com/DingChuanV
+  email: wanglufei0411@163.com
+  title: Coin-common模型测试
+  description: Coin-common模型测试API
+  version: 1.0
+  termOfServiceUrl: www.chiding.com
+
