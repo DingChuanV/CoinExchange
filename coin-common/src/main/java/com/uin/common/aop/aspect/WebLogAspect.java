@@ -7,8 +7,11 @@ import com.uin.common.model.WebLog;
 import io.swagger.annotations.ApiOperation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -44,6 +47,15 @@ public class WebLogAspect {
     // 计时器
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
+    //Object[] args = proceedingJoinPoint.getArgs();
+    /*List<Object> argsList = new ArrayList<>();
+    for (int i = 0; i < args.length; i++) {
+      // 如果参数类型是请求和响应的http，则不需要拼接【这两个参数，使用JSON.toJSONString()转换会抛异常】
+      if (args[i] instanceof HttpServletRequest || args[i] instanceof HttpServletResponse) {
+        continue;
+      }
+      argsList.add(args[i]);
+    }*/
     o = proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
     stopWatch.stop();
     // 获取请求上下文
@@ -65,13 +77,14 @@ public class WebLogAspect {
         .ip(request.getRemoteAddr())
         .parameter(getMethodParameter(method, proceedingJoinPoint.getArgs()))
         .method(className + "." + method.getName())
-        .result(request == null ? "" : JSON.toJSONString(request))
+        .result(request)
         .spendTime((int) stopWatch.getTotalTimeMillis())
         .uri(request.getRequestURI())
         .url(request.getRequestURL().toString())
         .username(authentication == null ? "anonymous" : authentication.getName())
         .build();
-    log.info(JSON.toJSONString(webLog, true));
+    /*log.info(JSON.toJSONString(webLog, true));*/
+    System.out.println(webLog.toString());
     return o;
   }
 
