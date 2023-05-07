@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 /**
  * 授权服务器配置
+ * @author dingchuan
  */
 @EnableAuthorizationServer
 @RequiredArgsConstructor
