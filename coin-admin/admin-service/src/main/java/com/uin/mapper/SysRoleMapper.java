@@ -2,6 +2,7 @@ package com.uin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.uin.domain.SysRole;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,10 @@ import com.uin.domain.SysRole;
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
+  /**
+   * 根据用户id查询角色code
+   * @param userId
+   * @return
+   */
+  String getUserRoleCode(@Param("userId") Long userId);
 }

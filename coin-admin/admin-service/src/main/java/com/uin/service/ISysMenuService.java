@@ -2,6 +2,7 @@ package com.uin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.uin.domain.SysMenu;
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +14,11 @@ import com.uin.domain.SysMenu;
  */
 public interface ISysMenuService extends IService<SysMenu> {
 
+  /**
+   * 根据用户id查询菜单
+   *
+   * @param userId
+   * @return
+   */
+  List<SysMenu> getMenusByUserId(Long userId);
 }

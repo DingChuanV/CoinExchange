@@ -1,6 +1,7 @@
 package com.uin.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -43,6 +44,7 @@ public class SysMenu implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "描述")
+    @TableField(value = "`desc`")
     private String desc;
 
     @ApiModelProperty(value = "目标地址")

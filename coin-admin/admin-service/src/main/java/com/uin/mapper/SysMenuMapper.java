@@ -2,6 +2,7 @@ package com.uin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.uin.domain.SysMenu;
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +14,10 @@ import com.uin.domain.SysMenu;
  */
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
+  /**
+   * 根据用户id查询菜单
+   * @param userId
+   * @return
+   */
+  List<SysMenu> selectMenusByUserId(Long userId);
 }

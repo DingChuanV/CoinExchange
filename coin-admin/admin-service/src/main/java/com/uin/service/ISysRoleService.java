@@ -13,4 +13,11 @@ import com.uin.domain.SysRole;
  */
 public interface ISysRoleService extends IService<SysRole> {
 
+  /**
+   * 根据用户ID判断是否是超级用户
+   *
+   * @param userId
+   * @return
+   */
+  boolean isSuperAdmin(Long userId);
 }

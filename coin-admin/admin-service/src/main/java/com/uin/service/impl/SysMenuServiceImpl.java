@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.uin.domain.SysMenu;
 import com.uin.mapper.SysMenuMapper;
 import com.uin.service.ISysMenuService;
+import com.uin.service.ISysRoleService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +19,16 @@ import org.springframework.stereotype.Service;
  * @since 2023-05-01
  */
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
-
+  private final ISysRoleService sysRoleService;
+  private final SysMenuMapper sysMenuMapper;
+  @Override
+  public List<SysMenu> getMenusByUserId(Long userId) {
+    if (sysRoleService.isSuperAdmin(userId)){
+      return list();
+    }
+    return sysMenuMapper.selectMenusByUserId(userId);
+  }
 }
