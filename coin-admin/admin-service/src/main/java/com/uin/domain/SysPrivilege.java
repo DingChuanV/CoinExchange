@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,12 +32,15 @@ public class SysPrivilege implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "所属菜单Id")
+    @NotNull
     private Long menuId;
 
     @ApiModelProperty(value = "功能点名称")
+    @NotNull
     private String name;
 
     @ApiModelProperty(value = "功能描述")
+    @NotNull
     private String description;
 
     private String url;
