@@ -1,5 +1,6 @@
 package com.uin.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.uin.domain.SysRole;
 
@@ -20,4 +21,6 @@ public interface ISysRoleService extends IService<SysRole> {
    * @return
    */
   boolean isSuperAdmin(Long userId);
+
+  Page<SysRole> findByPage(Page<SysRole> page, String name);
 }

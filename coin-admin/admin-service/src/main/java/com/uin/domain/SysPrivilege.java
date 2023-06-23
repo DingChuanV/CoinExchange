@@ -1,8 +1,6 @@
 package com.uin.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -48,15 +46,19 @@ public class SysPrivilege implements Serializable {
     private String method;
 
     @ApiModelProperty(value = "创建人")
+    @TableField(value = "create_by",fill = FieldFill.INSERT)
     private Long createBy;
 
     @ApiModelProperty(value = "修改人")
+    @TableField(value = "modify_by",fill = FieldFill.UPDATE)
     private Long modifyBy;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(value = "create_by",fill = FieldFill.INSERT)
     private Date created;
 
     @ApiModelProperty(value = "修改时间")
+    @TableField(value = "last_update_time",fill = FieldFill.INSERT_UPDATE)
     private Date lastUpdateTime;
 
 

@@ -1,6 +1,8 @@
 package com.uin.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.uin.domain.SysRole;
 import com.uin.mapper.SysRoleMapper;
@@ -27,9 +29,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
   @Override
   public boolean isSuperAdmin(Long userId) {
     String roleCode = sysRoleMapper.getUserRoleCode(userId);
-    if (StrUtil.isNotEmpty(roleCode)&& "ROLE_ADMIN".equals(roleCode)){
+    if (StrUtil.isNotEmpty(roleCode) && "ROLE_ADMIN".equals(roleCode)) {
       return true;
     }
     return false;
+  }
+
+  @Override
+  public Page<SysRole> findByPage(Page<SysRole> page, String name) {
+    return page(page, new LambdaQueryWrapper<SysRole>().like(StrUtil.isNotEmpty(name), SysRole::getName, name));
   }
 }
